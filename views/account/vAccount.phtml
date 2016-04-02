@@ -1,0 +1,45 @@
+
+<div class="row" id="account">
+	<div class="col-sm-8 ">
+		<h1>Order History</h1>
+	</div>
+	<div class="col-sm-4 "><br/>
+		<form id="search-form">
+		<div class="input-group has-feedback">
+			<input type="text" name="keyword" class="form-control" placeholder="Search for..." value="<?= !empty($keyword)?$keyword:""; ?>">
+			<?php if( !empty($keyword) ){ ?>
+			<span class="fa fa-times form-control-feedback" id="btn-clear-search" ></span>
+			<?php } ?>
+			<span class="input-group-btn">
+				<button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+			</span>
+		</div>
+		</form>
+	</div>
+	<table class="table table-striped table-hover table-inverse order-list">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Status</th>
+				<th>Date</th>
+				<th>Name</th>
+				<th>Email</th>
+				<th class="text-right">Total</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php forEach( $oorders as $oorder ){ ?>
+			<tr data-oorder-id="<?= $oorder->oorder_id ?>" >
+				<td><?= $oorder->oorder_id ?></td>
+				<td><?= $this->route("/m/orders/oOrders/getOptions/?column=oorder_status_id&key=".$oorder->oorder_status_id)->data; ?></td>
+				<td><?= date('d M Y h:i A',strtotime($oorder->oorder_date)); ?></td>
+				<td><?= $oorder->oorder_customer_name ?></td>
+				<td><?= $oorder->oorder_customer_email ?></td>
+				<td class="text-right">$<?= $oorder->oorder_total; ?></td>
+			</tr>
+			<?php } ?>
+		</tbody>
+	</table>
+</div>
+
+

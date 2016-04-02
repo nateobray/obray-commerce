@@ -1,0 +1,22 @@
+<div class="">
+	<h4>Contact Information</h4>
+	<address>
+		<?= $_SESSION['customer']->ocustomer_name; ?><br/>
+		<?= $_SESSION['customer']->ocustomer_email; ?><br/>
+		<?= $_SESSION['customer']->ocustomer_phone; ?><br/>
+	</address>
+	<hr/>
+	<h4>Ship To</h4>
+	<address>
+		<?= $_SESSION['shipTo']->oaddress_name; ?><br/>
+		<?= $_SESSION['shipTo']->oaddress_street_1; ?><br/>
+		<?= !empty($_SESSION['shipTo']->oaddress_street_2)?$_SESSION['shipTo']->oaddress_street_2.'<br/>':''; ?>
+		<?= $_SESSION['shipTo']->oaddress_city.' '.$_SESSION['shipTo']->oaddress_state.', '.$_SESSION['shipTo']->oaddress_zip; ?><br/>
+	</address>
+	<hr/>
+	<h4>Bill To</h4>
+	<address>
+		<?= $_SESSION['card']->ocard_type; ?><br/>
+		<?= "****-****-****-".$_SESSION['card']->ocard_last_four; ?><br/>
+	</address>
+</div>

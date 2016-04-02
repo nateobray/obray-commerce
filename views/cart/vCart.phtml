@@ -1,0 +1,245 @@
+<div class="row">
+	
+	<div class="cart-header col-sm-12">
+		
+		<h1 class="pull-left">Cart</h1>
+		<div class="account-invite pull-right">Already have an account?&nbsp;&nbsp; <button class="btn btn-default"><i class="icon icon-lock icon-lg"></i> Login</button></div>
+	</div>
+	
+	<div id="cart" class="col-sm-6">
+		
+		
+		<div class="content-box">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>&nbsp;</th>
+					<th class="text-left">Item</th>
+					<th class="text-right">Subtotal</th>
+				</tr>	
+			</thead>
+			<tbody>
+				<?php forEach( $_SESSION['cart']->items as $item ){ ?>
+				<tr>
+					<td><i class="fa fa-otimes"></i></td>
+					<td>
+						<?= '<a class="item-title" href="/service/'.$item->oproduct->parent[0]->oproduct_slug.'/"><strong>'.$item->oproduct->parent[0]->oproduct_name . '</strong></a><br/>('. $item->oproduct->oproduct_name . ') '; ?>
+						<strong>Watch(s)</strong>
+						<ul>
+						<?php forEach( $item->watches as $watch ){ ?>
+							<li><?= $watch->watch_brand_or_model . ' (' . $watch->watch_serial_number . ') '; ?></li>
+						<?php } ?>
+						</ul>
+					</td>
+					<td class="text-right subtotal">$<?= number_format($item->item_total,2,'.',','); ?></td>
+				</tr>
+				<?php } ?>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="2" class="text-right">Total</td>
+					<td class="text-right">$<?= number_format($_SESSION['cart']->total,2,'.',','); ?></td>
+				</tr>
+			</tfoot>
+		</table>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		
+		<div id="checkout-carousel" class="carousel slide" data-ride="carousel">
+			
+			<!-- CHECKOUT SLIDES -->
+			<div class="carousel-inner" role="listbox">
+				
+				<!--- SHIPPING FORM --->
+				<div class="item active" data-index="0">
+					
+					<form id="shipping-form">
+						
+						<h1>Contact Information</h1>
+						<p>Tell us who you are and how to contact you so we can make sure you get the service you deserve.<p>
+						<div id="customer-error-message"></div>
+						<div class="form-group clearfix">
+							<label for="ocustomer-name" class="col-md-3 control-label label-lg">Full Name</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control input-lg" id="ocustomer-name" name="ocustomer_name" placeholder="Full Name" value="<?= !empty($customer->ocustomer_name)?$customer->ocustomer_name:''; ?>">
+							</div>
+						</div>
+						
+						<div class="form-group clearfix">
+							<label for="ocustomer-email" class="col-md-3 control-label label-lg">Email</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control input-lg" id="ocustomer-email" name="ocustomer_email" placeholder="Email Address" value="<?= !empty($customer->ocustomer_email)?$customer->ocustomer_email:''; ?>">
+							</div>
+						</div>
+						
+						<div class="form-group clearfix">
+							<label for="ocustomer-phone" class="col-md-3 control-label label-lg">Phone</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control input-lg" id="ocustomer-phone" name="ocustomer_phone" placeholder="Phone Number" value="<?= !empty($customer->ocustomer_phone)?$customer->ocustomer_phone:''; ?>">
+							</div>
+						</div>
+					
+						<h1>Shipping Information</h1>	
+						<p>Please enter the address you would like us to send your box to pickup your watch.  We'll also return your watch to this address when we're finished servicing it.<p>
+					
+						<div id="shipping-error-message"></div>
+						<div class="form-group clearfix">
+							<label for="oaddress-name" class="col-md-3 control-label label-lg">Full Name</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control input-lg" id="oaddress-name" name="oaddress_name" placeholder="Full Name" value="<?= !empty($shipTo->oaddress_name)?$shipTo->oaddress_name:''; ?>">
+							</div>
+						</div>
+						
+						<div class="form-group clearfix">
+							<label for="oaddress-street-1" class="col-md-3 control-label label-lg">Street 1</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control input-lg" id="oaddress-street-1" name="oaddress_street_1" placeholder="Street 1" value="<?= !empty($shipTo->oaddress_street_1)?$shipTo->oaddress_street_1:''; ?>">
+							</div>
+						</div>
+						
+						<div class="form-group clearfix">
+							<label for="oaddress-street-2" class="col-md-3 control-label label-lg">Street 2</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control input-lg" id="oaddress-street-2" name="oaddress_street_2" placeholder="Street 2" value="<?= !empty($shipTo->oaddress_street_2)?$shipTo->oaddress_street_2:''; ?>">
+							</div>
+						</div>
+						
+						<div class="form-group clearfix">
+							<label for="oaddress-city" class="col-md-3 control-label label-lg">City, ST, ZIP</label>
+							<div class="col-md-4 city-container">
+								<input type="text" class="form-control input-lg" id="oaddress-city" name="oaddress_city" placeholder="City" value="<?= !empty($shipTo->oaddress_city)?$shipTo->oaddress_city:''; ?>">
+							</div>
+							<div class="col-md-2 state-container ">
+								<select class="form-control input-lg" name="oaddress_state">
+									<option></option>
+									<?php forEach( $states as $key => $state ){ ?>
+									<option <?= (!empty($shipTo->oaddress_state)&&$shipTo->oaddress_state===$key)?'SELECTED':''; ?> value="<?= $key; ?>"><?= $state; ?></option>
+									<?php } ?>
+									
+								</select>
+								
+							</div>
+							<div class="col-md-3 zip-container">
+								<input type="text" class="form-control input-lg" id="oaddress-zip" name="oaddress_zip" placeholder="ZIP" value="<?= !empty($shipTo->oaddress_zip)?$shipTo->oaddress_zip:''; ?>">
+							</div>
+						</div>
+						
+						<div class="form-group clearfix">
+							<div class="col-sm-offset-2 col-sm-10">								
+								<button type="submit" class="btn btn-primary btn-lg pull-right">&nbsp;&nbsp; <strong>Continue</strong> &nbsp;<i class="icon icon-arrow-circle-o-right icon-lg"></i>&nbsp;&nbsp;</submit>
+							</div>
+						</div>
+						
+					</form>
+					
+				</div>
+				
+				<!-- BILLING FORM -->
+				<div class="item"  data-index="1">
+					<h1>Billing Form</h1>
+					<p>Please enter the address you would like us to send your box to pickup your watch.  We'll also return your watch to this address when we're finished servicing it.<p>
+					<div id="bill-error-message"></div>
+					<form id="billing-form">
+						
+						<div class="form-group clearfix">
+							<label for="oaddress-city" class="col-md-4 control-label">Payment Method</label>
+							<div class="col-sm-8 state-container ">
+								<select class="form-control input-lg" name="oaddress_state">
+									<option value="credit-card">Credit Card</option>
+									<!-- <option value="paypal">PayPal</option> -->
+								</select>
+							</div>
+						</div>
+						
+						<hr/>
+						
+						<div class="form-group clearfix credit-card">
+							<label for="ocard-number" class="col-md-4 control-label">Credit Card #</label>
+							<div class="col-md-8">
+								<input type="text" class="form-control input-lg" id="ocard-number" name="ocard_number" placeholder="Credit Card Number">
+							</div>
+						</div>
+						
+						<div class="form-group clearfix credit-expiration">
+							<label for="ocard-number" class="col-md-4 control-label">Expiration</label>
+							<div class="col-md-5">
+								<input type="text" class="form-control input-lg" id="ocard-expiration" name="ocard_expiration" placeholder="MM/YYYY">
+							</div>
+						</div>
+						
+						<div class="form-group clearfix credit-cvc">
+							<label for="ocard-cvc" class="col-md-4 control-label">CVC</label>
+							<div class="col-md-3">
+								<input type="text" class="form-control input-lg" id="ocard-cvc" name="ocard_cvc" placeholder="">
+							</div>
+						</div>
+						
+						<div class="form-group clearfix">
+							<div class="col-sm-offset-2 col-sm-10">
+								<button type="submit" id="btn-billing" class="btn btn-primary btn-lg pull-right">&nbsp;&nbsp; <strong>Continue</strong> &nbsp;<i class="icon icon-arrow-circle-o-right icon-lg"></i> &nbsp;&nbsp;</submit>
+								<button class="btn btn-default pull-right btn-lg previous" data-loading-text='<i class="icon icon-cog icon-spin"></i> Saving...'><i class="icon icon-arrow-circle-o-left icon-lg"></i> Previous</button>
+							</div>
+						</div>
+						
+					</form>
+				</div>
+				
+				<!-- Account FORM -->
+				<div class="item"  data-index="1">
+					<h1>Create StewartTime.com Account</h1>
+					<p>Please supply a password to create a stewarttime.com account.  With an account you can check the status of your order and the service being done on your watch at any time.  We may also send you communication regarding your order which you can view here also.<p>
+					<div id="account-error-message"></div>
+					<form id="account-form">
+												
+						<div class="form-group clearfix ouser-password">
+							<label for="ocard-number" class="col-md-4 control-label">Password</label>
+							<div class="col-md-8">
+								<input type="password" class="form-control input-lg" id="ouser-password" name="ouser_password" placeholder="Enter password">
+							</div>
+						</div>
+						
+						<div class="form-group clearfix ouser-password-confrim">
+							<label for="ocard-number" class="col-md-4 control-label">Confirm Password</label>
+							<div class="col-md-8">
+								<input type="password" class="form-control input-lg" id="ouser-password-confirm" name="ouser_password_confirm" placeholder="Confirm Password">
+							</div>
+						</div>
+						
+						<div class="form-group clearfix">
+							<div class="col-sm-offset-2 col-sm-10">
+								<button type="submit" id="btn-account" class="btn btn-primary btn-lg pull-right">&nbsp;&nbsp; <strong>Continue</strong> &nbsp;<i class="icon icon-arrow-circle-o-right icon-lg"></i> &nbsp;&nbsp;</submit>
+								<button class="btn btn-default pull-right btn-lg previous" data-loading-text='<i class="icon icon-cog icon-spin"></i> Saving...'><i class="icon icon-arrow-circle-o-left icon-lg"></i> Previous</button>
+							</div>
+						</div>
+						
+					</form>
+				</div>
+				
+				<!--- SUMMARY -->
+				<div class="item" data-index="2">
+					<h1>Summary</h1>
+					<p>Please look over the following information and make sure it's correct then slick on "Finish".</p>
+					<form id="confirm-form">
+						
+						<div id="confirm-error-message"></div>
+						
+						<div class="row">
+							<div id="summary-content" class="col-sm-12">
+								
+							</div>
+						</div>
+						<div class="form-group clearfix">
+							<div class="col-sm-offset-2 col-sm-10">
+								<button type="submit" class="btn btn-primary btn-lg pull-right">&nbsp;&nbsp; <strong>Finish</strong> &nbsp;<i class="icon icon-arrow-circle-o-right icon-lg"></i> &nbsp;&nbsp;</button>
+								<button class="btn btn-default pull-right btn-lg previous" type="button"><i class="icon icon-arrow-circle-o-left icon-lg"></i> Previous </button>
+							</div>
+						</div>
+					</form>
+				</div>
+				
+			</div>
+		</div>
+		
+	</div>
+</div>

@@ -1,0 +1,52 @@
+
+	<table style="border-bottom: 1px solid #888;margin-bottom: 15px;">
+		<tr>
+			<td><h1 style="color:#000;">Receipt</h1></td>
+			<td style="padding:5px 0px;text-align: right;color:#000;">Order #<?= $oorder->oorder_id; ?></td>
+		</tr>
+	</table>
+	<table style="border-bottom: 1px solid #888;padding-bottom:15px;margin-bottom:15px;">
+		<tr>
+			<td><h2>Customer<h2></td>
+			<td><h2>Ship To</h2></td>
+			<td><h2>Payment</h2></td>
+		<tr/>
+		<tr>
+			<td style="color: #666;">
+				<?= $oorder->customer[0]->ocustomer_name; ?><br/>
+				<?= $oorder->customer[0]->ocustomer_email; ?><br/>
+				<?= $oorder->customer[0]->ocustomer_phone; ?><br/>
+			</td>
+			<td style="color: #666;">
+				<?= $oorder->shipTo[0]->oaddress_name; ?><br/>
+				<?= $oorder->shipTo[0]->oaddress_street_1; ?><br/>
+				<?= !empty($oorder->shipTo[0]->oaddress_street_2)?$oorder->shipTo[0]->oaddress_street_2.'<br/>':''; ?>
+				<?= $oorder->shipTo[0]->oaddress_city; ?> <?= $oorder->shipTo[0]->oaddress_state; ?>, <?= $oorder->shipTo[0]->oaddress_zip; ?><br/>
+			</td>
+			<td style="color: #666;">
+				<?= $oorder->card[0]->ocard_type ?><br/>
+				****-****-****-<?= $oorder->card[0]->ocard_last_four; ?><br/>
+			</td>
+		<tr/>
+	</table>
+	
+	<table>
+		<tr>
+			<th style="text-align:left;width:65%;">Item</th>
+			<th>Qty</th>
+			<th style="text-align:right;">Total</th>
+		</tr>
+		<?php forEach( $oorder->items as $oorder_item ){ ?>
+		<tr>
+			<td><?= $oorder_item->oorder_item_parent_description ?><br/><?= $oorder_item->oorder_item_description ?></td>
+			<td style="text-align:center"><?= $oorder_item->oorder_item_quantity; ?></td>
+			<td style="text-align:right">$<?= $oorder_item->oorder_item_total; ?></td>
+		</tr>
+		<?php } ?>
+		<tr>
+			<td>&nbsp;</td>
+			<td style="text-align:right;font-size:22px;font-weight:bold;border-top:1px solid #888;padding-top: 15px;color:#000;">Total</td>
+			<td style="text-align:right;font-size:22px;font-weight:bold;border-top:1px solid #888;padding-top: 15px;color:#000;"><?= $oorder->oorder_total; ?></td>
+		</tr>
+	</table>
+								
